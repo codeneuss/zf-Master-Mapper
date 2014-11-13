@@ -3,7 +3,7 @@ ZF Master Mapper
 
 Diese Library / Masterklassen sind für die Verwendung mit Zend Framework 1.11 und höher (nicht ZF2) ausgelegt.
 Der Mapper ermöglicht ein schnelles Prototyping und übersichtliche Datenbankabfragen direkt im Controller.
-Die Bibliothek besteht aus 2 Klassen. Die eine repräsentiert ein Model in Zend Framework und die andere den Mapper.
+Die Bibliothek besteht aus 3 Klassen. Die eine repräsentiert ein Model in Zend Framework und die andere den Mapper.
 
 Der Mapper zeichnet sich besonders durch die Funktionen `findBy`, `findAllBy`, `delete`, `save` aus. Ein Teil der Funktionen beherscht das Model ebenso. Dabei wird hierbei nur eine *Pipeline* zum Mapper erstellt.
 
@@ -52,3 +52,28 @@ class Application_Model_DbTable_Test extends Master_Table
   protected $_adapter = 'default';
 }
 ```
+
+Nun Kann auf die Mapperfunktionen im Controller zugegriffen werden:
+```php
+
+$model = new Application_Model_Test(); //Neuer Datensatz
+$model->created = time(); //time = 12345654
+$model->save(); //INSERT INTO tbl_Test (created) VALUES (12345654)
+
+$mapper = new Application_Model_TestMapper();
+$model = $mapper->findById(1); //SELECT * FROM tbl_Test WHERE (id = 1)
+
+$array = $model->__toArray();
+
+$created = $model->created; //Inhalt von created
+
+$model->modified = time(); //time = 13234545
+$model->save(); //UPDATE tbl_Test SET modified = 13234545
+
+$mapper->delete($model); //DELETE FROM tbl_Test WHERE (id = 1)
+
+```
+
+## Methoden ##
+### findBy ###
+
